@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\user 2\Desktop\sql_learn.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2686"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="SuperStoreOrders" custom_title="0" dock_id="1" table="4,16:mainSuperStoreOrders"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011300ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. View Data
+SELECT * FROM SuperStoreOrders
+LIMIT 10;
+
+-- 2. Total Sales
+SELECT ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders;
+
+-- 3. Total Profit
+SELECT ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders;
+
+-- 4. Total Orders
+SELECT COUNT(DISTINCT order_id) AS total_orders
+FROM SuperStoreOrders;
+
+-- 5. Total Customers
+SELECT COUNT(DISTINCT customer_name) AS total_customers
+FROM SuperStoreOrders;
+
+-- 6. Sales by Category
+SELECT
+category,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY category
+ORDER BY total_sales DESC;
+
+-- 7. Profit by Category
+SELECT
+category,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY category
+ORDER BY total_profit DESC;
+
+-- 8. Sales by Sub Category
+SELECT
+sub_category,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY sub_category
+ORDER BY total_sales DESC;
+
+-- 9. Top 10 Customers
+SELECT
+customer_name,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY customer_name
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- 10. Top 10 Profitable Customers
+SELECT
+customer_name,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY customer_name
+ORDER BY total_profit DESC
+LIMIT 10;
+
+-- 11. Region Wise Sales
+SELECT
+region,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY region
+ORDER BY total_sales DESC;
+
+-- 12. Market Wise Sales
+SELECT
+market,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY market
+ORDER BY total_sales DESC;
+
+-- 13. Country Wise Sales
+SELECT
+country,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY country
+ORDER BY total_sales DESC;
+
+-- 14. State Wise Sales
+SELECT
+state,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY state
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- 15. Year Wise Sales
+SELECT
+year,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY year
+ORDER BY year;
+
+-- 16. Year Wise Profit
+SELECT
+year,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY year
+ORDER BY year;
+
+-- 17. Average Order Value
+SELECT
+ROUND(SUM(sales) / COUNT(DISTINCT order_id),2) AS avg_order_value
+FROM SuperStoreOrders;
+
+-- 18. Most Sold Products
+SELECT
+product_name,
+SUM(quantity) AS total_quantity
+FROM SuperStoreOrders
+GROUP BY product_name
+ORDER BY total_quantity DESC
+LIMIT 10;
+
+-- 19. Most Profitable Products
+SELECT
+product_name,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY product_name
+ORDER BY total_profit DESC
+LIMIT 10;
+
+-- 20. Loss Making Products
+SELECT
+product_name,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY product_name
+HAVING total_profit &lt; 0
+ORDER BY total_profit;
+
+-- 21. Sales by Segment
+SELECT
+segment,
+ROUND(SUM(sales),2) AS total_sales
+FROM SuperStoreOrders
+GROUP BY segment
+ORDER BY total_sales DESC;
+
+-- 22. Profit by Segment
+SELECT
+segment,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY segment
+ORDER BY total_profit DESC;
+
+-- 23. Shipping Mode Analysis
+SELECT
+ship_mode,
+ROUND(SUM(sales),2) AS total_sales,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY ship_mode
+ORDER BY total_sales DESC;
+
+-- 24. Order Priority Analysis
+SELECT
+order_priority,
+COUNT(*) AS total_orders
+FROM SuperStoreOrders
+GROUP BY order_priority
+ORDER BY total_orders DESC;
+
+-- 25. Profit Margin %
+SELECT
+ROUND((SUM(profit) / SUM(sales)) * 100,2) AS profit_margin_percent
+FROM SuperStoreOrders;
+
+-- 26. Customer Segmentation
+SELECT
+customer_name,
+ROUND(SUM(sales),2) AS total_sales,
+CASE
+WHEN SUM(sales) &gt;= 10000 THEN 'High Value'
+WHEN SUM(sales) &gt;= 5000 THEN 'Medium Value'
+ELSE 'Low Value'
+END AS customer_segment
+FROM SuperStoreOrders
+GROUP BY customer_name
+ORDER BY total_sales DESC;
+
+-- 27. Top 5 Countries by Profit
+SELECT
+country,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY country
+ORDER BY total_profit DESC
+LIMIT 5;
+
+-- 28. Top 5 Loss Making Countries
+SELECT
+country,
+ROUND(SUM(profit),2) AS total_profit
+FROM SuperStoreOrders
+GROUP BY country
+ORDER BY total_profit ASC
+LIMIT 5;
+
+-- 29. Discount Impact Analysis
+SELECT
+ROUND(discount,2) AS discount_rate,
+ROUND(AVG(profit),2) AS avg_profit
+FROM SuperStoreOrders
+GROUP BY discount
+ORDER BY discount;
+
+-- 30. Dashboard KPI Query
+SELECT
+ROUND(SUM(sales),2) AS total_sales,
+ROUND(SUM(profit),2) AS total_profit,
+COUNT(DISTINCT order_id) AS total_orders,
+COUNT(DISTINCT customer_name) AS total_customers
+FROM SuperStoreOrders;
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
